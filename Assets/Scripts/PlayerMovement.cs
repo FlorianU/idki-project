@@ -38,7 +38,7 @@ public class PlayerMovement : MonoBehaviour
         // Accept jump input if grounded
         if (_charCont.isGrounded)
         {
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetButtonDown("Jump"))
             {
                 _moveDirection.y = jumpSpeed;
             }
