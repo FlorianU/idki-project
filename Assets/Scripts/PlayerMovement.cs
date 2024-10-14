@@ -1,4 +1,5 @@
 using UnityEngine;
+using static System.Runtime.CompilerServices.RuntimeHelpers;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -6,6 +7,8 @@ public class PlayerMovement : MonoBehaviour
     public float jumpSpeed = 4.0f;
     public float gravity = 9.8f;
     public float terminalVelocity = 100f;
+
+    private bool isCrouching = false;
 
     private CharacterController _charCont;
     private Vector3 _moveDirection = Vector3.zero;
@@ -35,7 +38,8 @@ public class PlayerMovement : MonoBehaviour
         float deltaX = Input.GetAxis("Horizontal") * moveSpeed;
         float deltaZ = Input.GetAxis("Vertical") * moveSpeed;
         _moveDirection = new Vector3(deltaX, _moveDirection.y, deltaZ);
-        // Accept jump input if grounded
+        
+        // Accept jump/crouch input if grounded
         if (_charCont.isGrounded)
         {
             if (Input.GetButtonDown("Jump"))
@@ -46,6 +50,17 @@ public class PlayerMovement : MonoBehaviour
             {
                 _moveDirection.y = 0f;
             }
+
+            if (Input.GetKeyDown(KeyCode.LeftControl))
+            {
+                isCrouching = true;
+                _charCont.height = 1;
+            } else if (Input.GetKeyUp(KeyCode.LeftControl))
+            {
+                isCrouching = false;
+                _charCont.height = 1.7f;
+            }
+
             // STUB: Handle movement processes, such as footsteps SFX
             if (deltaX != 0 || deltaZ != 0)
             {

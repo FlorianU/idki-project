@@ -25,6 +25,13 @@ public class PlayerLook : MonoBehaviour
 
     // UNITY HOOKS
 
+    private void Start()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+
+    }
+
     private void Update()
     {
         // STUB: Potentially handle look if player is active/inactive
