@@ -2619,8 +2619,8 @@ MonoBehaviour:
   axes: 2
   minimumVert: -85
   maximumVert: 85
-  sensHorizontal: 10
-  sensVertical: 10
+  sensHorizontal: 5
+  sensVertical: 5
   playerCameraComponent: {fileID: 0}
 --- !u!1 &5954924007800351996
 GameObject:
