@@ -9,6 +9,7 @@ public class PlayerMovement : MonoBehaviour
     public float terminalVelocity = 100f;
 
     private bool isCrouching = false;
+    private bool isSprinting = false;
 
     private CharacterController _charCont;
     private Vector3 _moveDirection = Vector3.zero;
@@ -34,9 +35,39 @@ public class PlayerMovement : MonoBehaviour
 
     private void HandlePlayerMove()
     {
+        float horizontalAxis = Input.GetAxis("Horizontal");
+        float verticalAxis = Input.GetAxis("Vertical");
+
+        if (verticalAxis > 0 && _charCont.isGrounded)
+        {
+            if (Input.GetKeyDown(KeyCode.LeftShift))
+            {
+                isSprinting = true;
+            }
+        }
+        if (verticalAxis <= 0)
+        {
+            isSprinting = false;
+        }
+        if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            isSprinting = false;
+        }
+
+        if (Input.GetKeyDown(KeyCode.LeftControl))
+        {
+            isCrouching = true;
+            _charCont.height = 1;
+        }
+        else if (Input.GetKeyUp(KeyCode.LeftControl))
+        {
+            isCrouching = false;
+            _charCont.height = 1.7f;
+        }
+
         // Move direction directly from axes
-        float deltaX = Input.GetAxis("Horizontal") * moveSpeed;
-        float deltaZ = Input.GetAxis("Vertical") * moveSpeed;
+        float deltaX = horizontalAxis * moveSpeed * (isSprinting ? 1.6f : 1) * (isCrouching ? 0.5f : 1);
+        float deltaZ = verticalAxis * moveSpeed * (isSprinting ? 1.6f : 1) * (isCrouching ? 0.5f : 1);
         _moveDirection = new Vector3(deltaX, _moveDirection.y, deltaZ);
         
         // Accept jump/crouch input if grounded
@@ -49,16 +80,6 @@ public class PlayerMovement : MonoBehaviour
             else
             {
                 _moveDirection.y = 0f;
-            }
-
-            if (Input.GetKeyDown(KeyCode.LeftControl))
-            {
-                isCrouching = true;
-                _charCont.height = 1;
-            } else if (Input.GetKeyUp(KeyCode.LeftControl))
-            {
-                isCrouching = false;
-                _charCont.height = 1.7f;
             }
 
             // STUB: Handle movement processes, such as footsteps SFX
