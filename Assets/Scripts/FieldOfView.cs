@@ -35,18 +35,26 @@ public class FieldOfView : MonoBehaviour
 
     private void FieldOfViewCheck()
     {
-        Collider[] rangeChecks = Physics.OverlapSphere(transform.position, radius, targetMask);
+        var viewingPosition = new Vector3(transform.position.x, transform.position.y + 1.3f, transform.position.z);
+
+        // find player in targetMask inside radius
+        Collider[] rangeChecks = Physics.OverlapSphere(viewingPosition, radius, targetMask);
 
         if (rangeChecks.Length != 0)
         {
             Transform target = rangeChecks[0].transform;
-            Vector3 directionToTarget = (target.position - new Vector3(transform.position.x, transform.position.y + 1.2f, transform.position.z)).normalized;
+            var targetViewingPosition = new Vector3(target.transform.position.x, target.transform.position.y + 1.3f, target.transform.position.z);
 
+            // get direction to target inside radius
+            Vector3 directionToTarget = (targetViewingPosition - viewingPosition).normalized;
+
+            // check if target is inside specified viewing angle
             if (Vector3.Angle(transform.forward, directionToTarget) < angle / 2)
             {
-                float distanceToTarget = Vector3.Distance(transform.position, target.position);
+                float distanceToTarget = Vector3.Distance(viewingPosition, targetViewingPosition);
 
-                if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstructionMask))
+                // check if in between player and viewer there is an obstacle
+                if (!Physics.Raycast(viewingPosition, directionToTarget, distanceToTarget, obstructionMask))
                     canSeePlayer = true;
                 else
                     canSeePlayer = false;

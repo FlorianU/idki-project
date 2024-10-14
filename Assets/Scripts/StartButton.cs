@@ -23,7 +23,7 @@ public class StartButton : MonoBehaviour
         Debug.Log(gameObject.name + " was clicked");
 
         int Index = SceneManager.sceneCount;
-        var operation = SceneManager.LoadSceneAsync("Demo", LoadSceneMode.Additive);
+        var operation = SceneManager.LoadSceneAsync("World1", LoadSceneMode.Additive);
         //operation.completed += (s) =>
         //{
         //    // text here

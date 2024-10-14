@@ -1644,10 +1644,10 @@ MonoBehaviour:
   playerRef: {fileID: 3704446393909175474, guid: 8cb58b185e4844748ab53eb5590d7aa0, type: 3}
   targetMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   obstructionMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128
   canSeePlayer: 0
 --- !u!1 &4954419429342870062
 GameObject:

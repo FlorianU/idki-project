@@ -1,3 +1,4 @@
+using log4net.Util;
 using UnityEditor;
 using UnityEngine;
 
@@ -7,20 +8,24 @@ public class FieldOfViewEditor : Editor
     private void OnSceneGUI()
     {
         FieldOfView fov = (FieldOfView)target;
+        var viewingPosition = new Vector3(fov.transform.position.x, fov.transform.position.y + 1.3f, fov.transform.position.z);
         Handles.color = Color.white;
-        Handles.DrawWireArc(fov.transform.position, Vector3.up, Vector3.forward, 360, fov.radius);
+        Handles.DrawWireArc(viewingPosition, Vector3.up, Vector3.forward, 360, fov.radius);
 
         Vector3 viewAngle01 = DirectionFromAngle(fov.transform.eulerAngles.y, -fov.angle / 2);
         Vector3 viewAngle02 = DirectionFromAngle(fov.transform.eulerAngles.y, fov.angle / 2);
 
         Handles.color = Color.yellow;
-        Handles.DrawLine(fov.transform.position, fov.transform.position + viewAngle01 * fov.radius);
-        Handles.DrawLine(fov.transform.position, fov.transform.position + viewAngle02 * fov.radius);
+        Handles.DrawLine(viewingPosition, viewingPosition + viewAngle01 * fov.radius);
+        Handles.DrawLine(viewingPosition, viewingPosition + viewAngle02 * fov.radius);
 
         if (fov.canSeePlayer)
         {
             Handles.color = Color.green;
-            Handles.DrawLine(fov.transform.position, fov.playerRef.transform.position);
+
+            // adjust angle to 1.3f (around middle of body of target)
+            var targetViewingPosition = new Vector3(fov.playerRef.transform.position.x, fov.playerRef.transform.position.y + 1.3f, fov.playerRef.transform.position.z);
+            Handles.DrawLine(viewingPosition, targetViewingPosition);
         }
     }
 

@@ -9,6 +9,6 @@ EditorBuildSettings:
     path: Assets/Scenes/StartScreen.unity
     guid: 85b3341591d9e07408bf70337b345351
   - enabled: 1
-    path: Assets/SyntyStudios/PolygonKnights/Scenes/Demo.unity
-    guid: c7214231c137bfb46bb461c5c95ec794
+    path: Assets/Scenes/World1.unity
+    guid: 9f390abde8026ec4395bc4b12bc8c86d
   m_configObjects: {}
