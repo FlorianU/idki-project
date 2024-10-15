@@ -1600,7 +1600,8 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   gravity: 9.8
-  moveSpeed: 13.5
+  moveSpeed: 1
+  sprintMultiplier: 4
 --- !u!143 &623269956610806739
 CharacterController:
   m_ObjectHideFlags: 0
@@ -1649,6 +1650,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   canSeePlayer: 0
+  dangerIndicator: {fileID: 9221617442735097183, guid: 55184d92595ed1843a08ce529181faa2, type: 3}
 --- !u!1 &4954419429342870062
 GameObject:
   m_ObjectHideFlags: 0
