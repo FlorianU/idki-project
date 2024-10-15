@@ -3,90 +3,128 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityEngine.UI;
+using static UnityEngine.GraphicsBuffer;
 
 public class FieldOfView : MonoBehaviour
 {
-    public float radius;
-    [Range(0, 360)]
-    public float angle;
+   public float radius;
+   [Range(0, 360)]
+   public float detectionAngle;
+   [Range(0, 10)]
+   public float detectionTime = 2f;
+   public float detectionLevel;
 
-    public GameObject playerRef;
+   public GameObject playerRef;
 
-    public LayerMask targetMask;
-    public LayerMask obstructionMask;
+   public LayerMask targetMask;
+   public LayerMask obstructionMask;
 
-    public bool canSeePlayer;
-    public event Action OnDetectionAction;
+   public bool canSeePlayer;
+   public event Action OnDetectionAction;
 
-    public Transform DamageImagePivot;
+   public Transform DamageImagePivot;
+   public UnityEngine.UI.Image detectionImg;
 
-    private void Start()
-    {
-        playerRef = GameObject.FindGameObjectWithTag("Player");
-        StartCoroutine(FOVRoutine());
-    }
+   private void Start()
+   {
+      playerRef = GameObject.FindGameObjectWithTag("Player");
+      detectionImg = DamageImagePivot.GetComponentInChildren<UnityEngine.UI.Image>();
 
-    private IEnumerator FOVRoutine()
-    {
-        WaitForSeconds wait = new WaitForSeconds(0.2f);
+      StartCoroutine(FOVRoutine());
+   }
 
-        while (true)
-        {
-            yield return wait;
-            FieldOfViewCheck();
-        }
-    }
+   private void Update()
+   {
+      SetDetectionIndicator();
+   }
 
-    private void FieldOfViewCheck()
-    {
-        var viewingPosition = new Vector3(transform.position.x, transform.position.y + 1.3f, transform.position.z);
+   private IEnumerator FOVRoutine()
+   {
+      WaitForSeconds wait = new WaitForSeconds(0.2f);
 
-        // find player in targetMask inside radius
-        Collider[] rangeChecks = Physics.OverlapSphere(viewingPosition, radius, targetMask);
+      while (true)
+      {
+         yield return wait;
+         FieldOfViewCheck();
+      }
+   }
 
-        if (rangeChecks.Length != 0)
-        {
-            Transform target = rangeChecks[0].transform;
-            var targetViewingPosition = new Vector3(target.transform.position.x, target.transform.position.y + 1.3f, target.transform.position.z);
+   private void FieldOfViewCheck()
+   {
+      var viewingPosition = new Vector3(transform.position.x, transform.position.y + 1.3f, transform.position.z);
 
-            // get direction to target inside radius
-            Vector3 directionToTarget = (targetViewingPosition - viewingPosition).normalized;
+      // find player in targetMask inside radius
+      Collider[] rangeChecks = Physics.OverlapSphere(viewingPosition, radius, targetMask);
 
-            // check if target is inside specified viewing angle
-            if (Vector3.Angle(transform.forward, directionToTarget) < angle / 2)
+      if (rangeChecks.Length != 0)
+      {
+         Transform target = rangeChecks[0].transform;
+         var targetViewingPosition = new Vector3(target.transform.position.x, target.transform.position.y + 1.3f, target.transform.position.z);
+
+         // get direction to target inside radius
+         Vector3 directionToTarget = (targetViewingPosition - viewingPosition).normalized;
+         float distanceToTarget = Vector3.Distance(viewingPosition, targetViewingPosition);
+
+         // check if target is inside specified viewing angle
+         if (Vector3.Angle(transform.forward, directionToTarget) < detectionAngle / 2)
+         {
+            // check if in between player and viewer there is an obstacle
+            if (!Physics.Raycast(viewingPosition, directionToTarget, distanceToTarget, obstructionMask))
             {
-                float distanceToTarget = Vector3.Distance(viewingPosition, targetViewingPosition);
+               detectionLevel += 0.2f;
+               canSeePlayer = true;
 
-                // check if in between player and viewer there is an obstacle
-                if (!Physics.Raycast(viewingPosition, directionToTarget, distanceToTarget, obstructionMask))
-                {
-                    canSeePlayer = true;
-                    
-                    DamageImagePivot.gameObject.SetActive(true);
-                    float angle = Vector3.SignedAngle(-directionToTarget, target.transform.forward, Vector3.up);
-                    DamageImagePivot.transform.localEulerAngles = new Vector3(0, 0, angle);
-
-                    OnDetectionAction.Invoke();
-                }
-                else
-                {
-                    PlayerUnseen();
-                }
+               if (detectionLevel >= detectionTime)
+               {
+                  OnDetectionAction.Invoke();
+               }
             }
             else
             {
-                PlayerUnseen();
+               canSeePlayer = false;
             }
-        }
-        else if (canSeePlayer)
-        {
-            PlayerUnseen();
-        }
-    }
+         }
+         else
+         {
+            canSeePlayer = false;
+         }
+      }
+      else if (canSeePlayer)
+      {
+         canSeePlayer = false;
+      }
 
-    private void PlayerUnseen()
-    {
-        canSeePlayer = false;
-        DamageImagePivot.gameObject.SetActive(false);
-    }
+      if (!canSeePlayer && detectionLevel > 0)
+      {
+         detectionLevel -= 0.2f;
+      }
+   }
+
+   // Control detection indicator
+   private void SetDetectionIndicator()
+   {
+      if (detectionLevel > 0)
+      {
+         if (!DamageImagePivot.gameObject.activeSelf)
+         {
+            // Activate detectionIndicator if detectionLevel present
+            DamageImagePivot.gameObject.SetActive(true);
+         }
+
+         // Calculate rotation of indicator relative to detecting patrols position
+         float angle = Vector3.SignedAngle((new Vector3(transform.position.x, 1.3f, transform.position.z) - new Vector3(playerRef.transform.position.x, 1.3f, playerRef.transform.position.z)).normalized, playerRef.transform.forward, Vector3.up);
+         DamageImagePivot.transform.localEulerAngles = new Vector3(0, 0, angle);
+
+         // Change transparency of detection indicator relative to detectionLevel
+         var tempColor = detectionImg.color;
+         tempColor.a = detectionLevel / detectionTime;
+         detectionImg.color = tempColor;
+      }
+      else if (DamageImagePivot.gameObject.activeSelf)
+      {
+         // Deactivate detectionIndicator if no detectionLevel present
+         DamageImagePivot.gameObject.SetActive(false);
+      }
+   }
 }

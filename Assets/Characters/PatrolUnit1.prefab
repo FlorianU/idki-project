@@ -1816,7 +1816,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   radius: 13
-  angle: 65
+  detectionAngle: 90
+  detectionTime: 2
+  detectionLevel: 0
   playerRef: {fileID: 3704446393909175474, guid: 8cb58b185e4844748ab53eb5590d7aa0, type: 3}
   targetMask:
     serializedVersion: 2
@@ -1825,8 +1827,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   canSeePlayer: 0
-  dangerIndicator: {fileID: 9221617442735097183, guid: 55184d92595ed1843a08ce529181faa2, type: 3}
   DamageImagePivot: {fileID: 895811334127901771}
+  detectionImg: {fileID: 0}
 --- !u!1 &4954419429342870062
 GameObject:
   m_ObjectHideFlags: 0

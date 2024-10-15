@@ -13394,6 +13394,18 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3979549620125087203, guid: 2cd0d2ad60eb02c4984aced183e579d1, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3979549620125087203, guid: 2cd0d2ad60eb02c4984aced183e579d1, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3979549620125087203, guid: 2cd0d2ad60eb02c4984aced183e579d1, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4666520685796310416, guid: 2cd0d2ad60eb02c4984aced183e579d1, type: 3}
       propertyPath: m_Name
       value: PatrolUnit1
@@ -13409,6 +13421,14 @@ PrefabInstance:
     - target: {fileID: 8116907876041215744, guid: 2cd0d2ad60eb02c4984aced183e579d1, type: 3}
       propertyPath: canSeePlayer
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8116907876041215744, guid: 2cd0d2ad60eb02c4984aced183e579d1, type: 3}
+      propertyPath: detectionTime
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8116907876041215744, guid: 2cd0d2ad60eb02c4984aced183e579d1, type: 3}
+      propertyPath: detectionAngle
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 8116907876041215744, guid: 2cd0d2ad60eb02c4984aced183e579d1, type: 3}
       propertyPath: DamageImagePivot
@@ -15945,6 +15965,14 @@ PrefabInstance:
     - target: {fileID: 4666520685796310416, guid: 2cd0d2ad60eb02c4984aced183e579d1, type: 3}
       propertyPath: m_Name
       value: PatrolUnit2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8116907876041215744, guid: 2cd0d2ad60eb02c4984aced183e579d1, type: 3}
+      propertyPath: detectionTime
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8116907876041215744, guid: 2cd0d2ad60eb02c4984aced183e579d1, type: 3}
+      propertyPath: detectionAngle
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 9000354493396523336, guid: 2cd0d2ad60eb02c4984aced183e579d1, type: 3}
       propertyPath: m_LocalPosition.x
