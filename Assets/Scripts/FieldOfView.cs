@@ -18,7 +18,7 @@ public class FieldOfView : MonoBehaviour
     public bool canSeePlayer;
     public event Action OnDetectionAction;
 
-    public GameObject dangerIndicator;
+    public Transform DamageImagePivot;
 
     private void Start()
     {
@@ -61,14 +61,10 @@ public class FieldOfView : MonoBehaviour
                 if (!Physics.Raycast(viewingPosition, directionToTarget, distanceToTarget, obstructionMask))
                 {
                     canSeePlayer = true;
-                    dangerIndicator.SetActive(true);
-                    //float angle = Vector3.Angle((viewingPosition - targetViewingPosition).normalized, target.transform.forward);
-                    //dangerIndicator.transform.rotation = Quaternion.Euler(0, 0, angle);
-
-                    //dangerIndicator.transform.rotation = Quaternion.Euler(0, 0, Quaternion.FromToRotation(Vector3.forward, directionToTarget - target.transform.forward).eulerAngles.z);
-
-                    float angle = Vector3.Angle(directionToTarget,  target.transform.forward * -1);
-                    dangerIndicator.transform.rotation = Quaternion.Euler(0, 0, (Vector3.Angle(Vector3.right, target.transform.forward) > 90f) ? 360f - angle : angle);
+                    
+                    DamageImagePivot.gameObject.SetActive(true);
+                    float angle = Vector3.SignedAngle(-directionToTarget, target.transform.forward, Vector3.up);
+                    DamageImagePivot.transform.localEulerAngles = new Vector3(0, 0, angle);
 
                     OnDetectionAction.Invoke();
                 }
@@ -91,6 +87,6 @@ public class FieldOfView : MonoBehaviour
     private void PlayerUnseen()
     {
         canSeePlayer = false;
-        dangerIndicator.SetActive(false);
+        DamageImagePivot.gameObject.SetActive(false);
     }
 }
