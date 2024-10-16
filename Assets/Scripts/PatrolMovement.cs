@@ -21,6 +21,7 @@ public class PatrolMovement : MonoBehaviour
    private FieldOfView fov;
    private GameObject player;
    private Vector3 initialPosition;
+   private Quaternion initialRotation;
 
    private bool hasDetected = false;
    private bool hasDetectedNoise = false;
@@ -36,6 +37,7 @@ public class PatrolMovement : MonoBehaviour
 
       fov.OnDetectionAction += Fov_OnDetectionAction;
       initialPosition = transform.position;
+      initialRotation = transform.rotation;
    }
 
    private void Fov_OnDetectionAction()
@@ -77,16 +79,26 @@ public class PatrolMovement : MonoBehaviour
                   currentWp = 0;
                }
 
+               // Move to current waypoint
                MoveToWaypoint(new Vector3(waypoints[currentWp].transform.position.x, transform.position.y, waypoints[currentWp].transform.position.z));
             }
             else
             {
-               animator.SetBool("isMoving", false);
-               animator.SetBool("isRunning", false);
+               if (Vector3.Distance(this.transform.position, initialPosition) < 1)
+               {
+                  animator.SetBool("isMoving", false);
+                  animator.SetBool("isRunning", false);
+
+                  transform.rotation = initialRotation;
+               } else
+               {
+                  MoveToWaypoint(initialPosition);
+               }
             }
          }
          else
          {
+            // walk to noiseDistraction
             var noiseWalkingPosition = new Vector3(noisePosition.x, transform.position.y, noisePosition.z);
             if (Vector3.Distance(this.transform.position, noiseWalkingPosition) < 1)
             {
