@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TreasureInteraction : MonoBehaviour
 {
@@ -21,28 +22,32 @@ public class TreasureInteraction : MonoBehaviour
 
    }
 
-   private void OnMouseOver()
+   private void OnTriggerEnter(Collider other)
    {
-      if (Input.GetMouseButtonDown(0))
+
+   }
+
+   void OnTriggerStay(Collider other)
+   {
+      if (other.CompareTag("MainCamera"))
       {
-         vanishingParticles.Play();
-         // make loot disappear on click
-         gameObject.SetActive(false);
-         gameManager.IncreaseScore(value);
-         //Destroy(gameObject);
+         gameObject.GetComponent<Outline>().enabled = true;
+
+         if (Input.GetMouseButtonDown(0))
+         {
+            vanishingParticles.Play();
+            // make loot disappear on click
+            gameObject.SetActive(false);
+            gameManager.IncreaseScore(value);
+         }
       }
    }
 
-   private void OnMouseEnter()
+   void OnTriggerExit(Collider other)
    {
-      // enable outline when mouse hovers over object
-      gameObject.GetComponent<Outline>().enabled = true;
-   }
-
-   private void OnMouseExit()
-   {
-      // disable outline when mouse leaves object
-      gameObject.GetComponent<Outline>().enabled = false;
-
+      if (other.CompareTag("MainCamera"))
+      {
+         gameObject.GetComponent<Outline>().enabled = false;
+      }
    }
 }

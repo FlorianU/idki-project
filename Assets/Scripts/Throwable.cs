@@ -54,6 +54,7 @@ public class throwable : MonoBehaviour
          interactable = true;
       }
    }
+
    void OnTriggerExit(Collider other)
    {
       if (other.CompareTag("MainCamera"))
@@ -76,6 +77,7 @@ public class throwable : MonoBehaviour
          }
       }
    }
+
    void Update()
    {
       if (interactable == true)
