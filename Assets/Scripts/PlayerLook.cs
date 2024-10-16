@@ -34,8 +34,7 @@ public class PlayerLook : MonoBehaviour
 
     private void Update()
     {
-        // STUB: Potentially handle look if player is active/inactive
-        if (true)
+        if (!GameManager.Instance.isPaused)
         {
             CalculateLookRotation();
         }
