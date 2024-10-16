@@ -72,7 +72,7 @@ public class FieldOfView : MonoBehaviour
             // check if in between player and viewer there is an obstacle
             if (!Physics.Raycast(viewingPosition, directionToTarget, distanceToTarget, obstructionMask))
             {
-               detectionLevel += 0.2f;
+               detectionLevel += 0.2f + (radius / distanceToTarget / 8);
                canSeePlayer = true;
 
                if (detectionLevel >= detectionTime)
