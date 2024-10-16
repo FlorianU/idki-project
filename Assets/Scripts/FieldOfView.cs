@@ -24,7 +24,7 @@ public class FieldOfView : MonoBehaviour
    public event Action OnDetectionAction;
 
    public Transform DamageImagePivot;
-   private UnityEngine.UI.Image detectionImg;
+   public UnityEngine.UI.Image detectionImg;
 
    private void Start()
    {

@@ -18,7 +18,7 @@ public class ContinueButton : MonoBehaviour
 
    public void ContinueGame()
    {
-      GameManager.Instance.TogglePause();
+      GameManager.Instance.TogglePauseScreen();
    }
 
 

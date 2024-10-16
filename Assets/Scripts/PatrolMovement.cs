@@ -63,7 +63,7 @@ public class PatrolMovement : MonoBehaviour
    // Update is called once per frame
    void Update()
    {
-      if(GameManager.Instance.isPaused)
+      if (GameManager.Instance.isPaused)
       {
          return;
       }
@@ -95,7 +95,8 @@ public class PatrolMovement : MonoBehaviour
                   animator.SetBool("isRunning", false);
 
                   transform.rotation = initialRotation;
-               } else
+               }
+               else
                {
                   MoveToWaypoint(initialPosition);
                }
@@ -118,6 +119,11 @@ public class PatrolMovement : MonoBehaviour
       }
       else
       {
+         if (Vector3.Distance(this.transform.position, player.transform.position) < 1)
+         {
+            GameManager.Instance.EndGame();
+         }
+
          animator.SetBool("isRunning", true);
 
          this.transform.LookAt(new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z));

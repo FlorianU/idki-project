@@ -12,8 +12,9 @@ public class GameManager : MonoBehaviour
    public bool isPaused;
 
    public GameObject pauseScreen;
-   public GameObject restartButton;
+   public GameObject gameOverScreen;
    public TextMeshProUGUI scoreText;
+   public TextMeshProUGUI endScoreText;
 
    private void Awake()
    {
@@ -31,15 +32,21 @@ public class GameManager : MonoBehaviour
    {
       if (Input.GetButtonDown("Cancel"))
       {
-         TogglePause();
+         TogglePauseScreen();
       }
 
    }
 
+   public void TogglePauseScreen()
+   {
+      TogglePause();
+      pauseScreen.SetActive(isPaused);
+   }
+
+
    public void TogglePause()
    {
       isPaused = !isPaused;
-      pauseScreen.SetActive(isPaused);
       Cursor.lockState = isPaused ? CursorLockMode.None : CursorLockMode.Locked;
       Cursor.visible = isPaused;
       Time.timeScale = isPaused ? 0 : 1;
@@ -49,5 +56,12 @@ public class GameManager : MonoBehaviour
    {
       currentScore += score;
       scoreText.text = currentScore.ToString("0.00") + " $";
+      endScoreText.text = currentScore.ToString("0.00") + " $";
+   }
+
+   public void EndGame()
+   {
+      gameOverScreen.SetActive(true);
+      TogglePause();
    }
 }
