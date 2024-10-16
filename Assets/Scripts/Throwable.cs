@@ -7,10 +7,14 @@ public class throwable : MonoBehaviour
    //public GameObject crosshair1, crosshair2;
    public bool interactable, pickedup;
    public float throwAmount;
+   public float noiseRadius;
+   public LayerMask guardLayer;
 
    private Transform objTransform, cameraTrans;
    private Rigidbody objRigidbody;
    private Outline outline;
+
+   private bool isThrown;
 
    private void Start()
    {
@@ -19,6 +23,25 @@ public class throwable : MonoBehaviour
       outline.enabled = false;
       objTransform = gameObject.transform;
       cameraTrans = GameObject.Find("PlayerCamera").transform;
+   }
+
+   private void OnTriggerEnter(Collider other)
+   {
+      if (isThrown && other.gameObject.layer == 9)
+      {
+         isThrown = false;
+
+         Debug.Log("throwable collided with obstacle");
+         Collider[] rangeChecks = Physics.OverlapSphere(new Vector3(transform.position.x, 1.3f, transform.position.z), noiseRadius, guardLayer);
+
+         if (rangeChecks.Length > 0)
+         {
+            foreach (var guard in rangeChecks)
+            {
+               guard.GetComponent<PatrolMovement>().AlertNoise(transform.position);
+            }
+         }
+      }
    }
 
    void OnTriggerStay(Collider other)
@@ -77,6 +100,7 @@ public class throwable : MonoBehaviour
                objRigidbody.useGravity = true;
                objRigidbody.velocity = cameraTrans.forward * throwAmount * Time.deltaTime;
                pickedup = false;
+               isThrown = true;
             }
          }
       }

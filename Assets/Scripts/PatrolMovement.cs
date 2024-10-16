@@ -13,14 +13,18 @@ public class PatrolMovement : MonoBehaviour
    public float moveSpeed = 1f;
    [Range(1, 5)]
    public float sprintMultiplier = 1.8f;
+   public float noiseDistractionTime = 5f;
    private Vector3 _moveDirection = Vector3.zero;
 
    private CharacterController _charCont;
    private Animator animator;
    private FieldOfView fov;
    private GameObject player;
+   private Vector3 initialPosition;
 
    private bool hasDetected = false;
+   private bool hasDetectedNoise = false;
+   private Vector3 noisePosition;
    private bool isMoving = true;
 
    // Start is called before the first frame update
@@ -31,6 +35,7 @@ public class PatrolMovement : MonoBehaviour
       fov = GetComponent<FieldOfView>();
 
       fov.OnDetectionAction += Fov_OnDetectionAction;
+      initialPosition = transform.position;
    }
 
    private void Fov_OnDetectionAction()
@@ -39,44 +44,63 @@ public class PatrolMovement : MonoBehaviour
       hasDetected = true;
    }
 
+   public void AlertNoise(Vector3 position)
+   {
+      hasDetectedNoise = true;
+      noisePosition = position;
+      StartCoroutine(NoiseAlertCountdown());
+   }
+
+   private IEnumerator NoiseAlertCountdown()
+   {
+      yield return new WaitForSeconds(noiseDistractionTime);
+
+      hasDetectedNoise = false;
+   }
+
    // Update is called once per frame
    void Update()
    {
       if (!hasDetected)
       {
-         if (waypoints.Length > 0)
+         if (!hasDetectedNoise)
          {
-            // Get the next waypoint if distance is < 1
-            if (Vector3.Distance(this.transform.position, waypoints[currentWp].transform.position) < 1)
+            if (waypoints.Length > 0)
             {
-               currentWp++;
+               // Get the next waypoint if distance is < 1
+               if (Vector3.Distance(this.transform.position, waypoints[currentWp].transform.position) < 1)
+               {
+                  currentWp++;
+               }
+               if (currentWp >= waypoints.Length)
+               {
+                  currentWp = 0;
+               }
+
+               MoveToWaypoint(new Vector3(waypoints[currentWp].transform.position.x, transform.position.y, waypoints[currentWp].transform.position.z));
             }
-            if (currentWp >= waypoints.Length)
+            else
             {
-               currentWp = 0;
+               animator.SetBool("isMoving", false);
+               animator.SetBool("isRunning", false);
             }
-
-            // Look at new waypoint
-            this.transform.LookAt(new Vector3(waypoints[currentWp].transform.position.x, transform.position.y, waypoints[currentWp].transform.position.z));
-
-            _moveDirection = transform.forward;
-            _moveDirection.y -= this.gravity * Time.deltaTime;
-
-            animator.SetBool("isMoving", true);
-            animator.SetBool("isRunning", false);
-
-            // Move the controller
-            _charCont.Move(_moveDirection * Time.deltaTime * moveSpeed);
          }
          else
          {
-            animator.SetBool("isMoving", false);
-            animator.SetBool("isRunning", false);
+            var noiseWalkingPosition = new Vector3(noisePosition.x, transform.position.y, noisePosition.z);
+            if (Vector3.Distance(this.transform.position, noiseWalkingPosition) < 1)
+            {
+               animator.SetBool("isMoving", false);
+               animator.SetBool("isRunning", false);
+            }
+            else
+            {
+               MoveToWaypoint(noiseWalkingPosition);
+            }
          }
       }
       else
       {
-         animator.SetBool("isMoving", true);
          animator.SetBool("isRunning", true);
 
          this.transform.LookAt(new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z));
@@ -87,5 +111,20 @@ public class PatrolMovement : MonoBehaviour
          // Move the controller
          _charCont.Move(_moveDirection * Time.deltaTime * moveSpeed * sprintMultiplier);
       }
+   }
+
+   private void MoveToWaypoint(Vector3 position)
+   {
+      // Look at new waypoint
+      this.transform.LookAt(position);
+
+      _moveDirection = transform.forward;
+      _moveDirection.y -= this.gravity * Time.deltaTime;
+
+      animator.SetBool("isMoving", true);
+      animator.SetBool("isRunning", false);
+
+      // Move the controller
+      _charCont.Move(_moveDirection * Time.deltaTime * moveSpeed);
    }
 }

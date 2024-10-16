@@ -1019,7 +1019,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &895811334127901771
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1699,9 +1699,9 @@ GameObject:
   - component: {fileID: 621103566518154725}
   - component: {fileID: 623269956610806739}
   - component: {fileID: 8116907876041215744}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: PatrolUnit
-  m_TagString: Untagged
+  m_TagString: Guard
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1777,6 +1777,7 @@ MonoBehaviour:
   gravity: 9.8
   moveSpeed: 1
   sprintMultiplier: 4
+  noiseDistractionTime: 5
 --- !u!143 &623269956610806739
 CharacterController:
   m_ObjectHideFlags: 0
@@ -1817,7 +1818,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   radius: 13
   detectionAngle: 90
-  detectionTime: 2
+  detectionTime: 3
   detectionLevel: 0
   playerRef: {fileID: 3704446393909175474, guid: 8cb58b185e4844748ab53eb5590d7aa0, type: 3}
   targetMask:

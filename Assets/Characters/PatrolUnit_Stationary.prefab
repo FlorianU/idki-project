@@ -44,7 +44,7 @@ GameObject:
   - component: {fileID: 155282428004588565}
   - component: {fileID: 4308182071394622295}
   - component: {fileID: 1608481116512054694}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: PatrolUnit_Stationary
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -110,6 +110,7 @@ MonoBehaviour:
   gravity: 9.8
   moveSpeed: 1
   sprintMultiplier: 4
+  noiseDistractionTime: 5
 --- !u!143 &4308182071394622295
 CharacterController:
   m_ObjectHideFlags: 0
