@@ -44,19 +44,18 @@ public class PatrolMovement : MonoBehaviour
    {
       if (!hasDetected)
       {
+         if (waypoints.Length > 0)
+         {
+            // Get the next waypoint if distance is < 1
+            if (Vector3.Distance(this.transform.position, waypoints[currentWp].transform.position) < 1)
+            {
+               currentWp++;
+            }
+            if (currentWp >= waypoints.Length)
+            {
+               currentWp = 0;
+            }
 
-         // Get the next waypoint if distance is < 1
-         if (Vector3.Distance(this.transform.position, waypoints[currentWp].transform.position) < 1)
-         {
-            currentWp++;
-         }
-         if (currentWp >= waypoints.Length)
-         {
-            currentWp = 0;
-         }
-
-         if (waypoints[currentWp] != null)
-         {
             // Look at new waypoint
             this.transform.LookAt(new Vector3(waypoints[currentWp].transform.position.x, transform.position.y, waypoints[currentWp].transform.position.z));
 
@@ -68,7 +67,8 @@ public class PatrolMovement : MonoBehaviour
 
             // Move the controller
             _charCont.Move(_moveDirection * Time.deltaTime * moveSpeed);
-         } else
+         }
+         else
          {
             animator.SetBool("isMoving", false);
             animator.SetBool("isRunning", false);
