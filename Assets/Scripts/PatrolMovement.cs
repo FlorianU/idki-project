@@ -5,75 +5,87 @@ using UnityEngine.EventSystems;
 
 public class PatrolMovement : MonoBehaviour
 {
-    public GameObject[] waypoints;
-    int currentWp = 0;
+   public GameObject[] waypoints;
+   int currentWp = 0;
 
-    public float gravity = 9.8f;
-    [Range(0, 3)]
-    public float moveSpeed = 1f;
-    [Range(1, 5)]
-    public float sprintMultiplier = 1.8f;
-    private Vector3 _moveDirection = Vector3.zero;
+   public float gravity = 9.8f;
+   [Range(0, 3)]
+   public float moveSpeed = 1f;
+   [Range(1, 5)]
+   public float sprintMultiplier = 1.8f;
+   private Vector3 _moveDirection = Vector3.zero;
 
-    private CharacterController _charCont;
-    private Animator animator;
-    private FieldOfView fov;
-    private GameObject player;
+   private CharacterController _charCont;
+   private Animator animator;
+   private FieldOfView fov;
+   private GameObject player;
 
-    private bool hasDetected = false;
-    private bool isMoving = true;
+   private bool hasDetected = false;
+   private bool isMoving = true;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        _charCont = GetComponent<CharacterController>();
-        animator = GetComponent<Animator>();
-        fov = GetComponent<FieldOfView>();
+   // Start is called before the first frame update
+   void Start()
+   {
+      _charCont = GetComponent<CharacterController>();
+      animator = GetComponent<Animator>();
+      fov = GetComponent<FieldOfView>();
 
-        fov.OnDetectionAction += Fov_OnDetectionAction;
-    }
+      fov.OnDetectionAction += Fov_OnDetectionAction;
+   }
 
-    private void Fov_OnDetectionAction()
-    {
-        player = GameObject.FindGameObjectWithTag("Player");
-        hasDetected = true;
-    }
+   private void Fov_OnDetectionAction()
+   {
+      player = GameObject.FindGameObjectWithTag("Player");
+      hasDetected = true;
+   }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (!hasDetected) {
-            animator.SetBool("isMoving", true);
+   // Update is called once per frame
+   void Update()
+   {
+      if (!hasDetected)
+      {
 
-            // Get the next waypoint if distance is < 1
-            if(Vector3.Distance(this.transform.position, waypoints[currentWp].transform.position) < 1)
-            {
-                currentWp++;
-            }
-            if(currentWp >= waypoints.Length)
-            {
-                currentWp = 0;
-            }
+         // Get the next waypoint if distance is < 1
+         if (Vector3.Distance(this.transform.position, waypoints[currentWp].transform.position) < 1)
+         {
+            currentWp++;
+         }
+         if (currentWp >= waypoints.Length)
+         {
+            currentWp = 0;
+         }
 
+         if (waypoints[currentWp] != null)
+         {
             // Look at new waypoint
             this.transform.LookAt(new Vector3(waypoints[currentWp].transform.position.x, transform.position.y, waypoints[currentWp].transform.position.z));
-            
+
             _moveDirection = transform.forward;
             _moveDirection.y -= this.gravity * Time.deltaTime;
-            
+
+            animator.SetBool("isMoving", true);
+            animator.SetBool("isRunning", false);
+
             // Move the controller
             _charCont.Move(_moveDirection * Time.deltaTime * moveSpeed);
-        } else
-        {
-            animator.SetBool("isRunning", true);
+         } else
+         {
+            animator.SetBool("isMoving", false);
+            animator.SetBool("isRunning", false);
+         }
+      }
+      else
+      {
+         animator.SetBool("isMoving", true);
+         animator.SetBool("isRunning", true);
 
-            this.transform.LookAt(new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z));
+         this.transform.LookAt(new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z));
 
-            _moveDirection = transform.forward;
-            _moveDirection.y -= this.gravity * Time.deltaTime;
+         _moveDirection = transform.forward;
+         _moveDirection.y -= this.gravity * Time.deltaTime;
 
-            // Move the controller
-            _charCont.Move(_moveDirection * Time.deltaTime * moveSpeed * sprintMultiplier);
-        }
-    }
+         // Move the controller
+         _charCont.Move(_moveDirection * Time.deltaTime * moveSpeed * sprintMultiplier);
+      }
+   }
 }

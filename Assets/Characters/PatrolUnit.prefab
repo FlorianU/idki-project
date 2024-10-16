@@ -1700,7 +1700,7 @@ GameObject:
   - component: {fileID: 623269956610806739}
   - component: {fileID: 8116907876041215744}
   m_Layer: 0
-  m_Name: PatrolUnit1
+  m_Name: PatrolUnit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
