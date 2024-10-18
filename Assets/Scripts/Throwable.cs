@@ -27,13 +27,17 @@ public class throwable : MonoBehaviour
 
    private void OnTriggerEnter(Collider other)
    {
+      // Check if item falls on floor (NoiseGenerating Layer)
       if (isThrown && other.gameObject.layer == 9)
       {
          isThrown = false;
 
-         Debug.Log("throwable collided with obstacle");
+         Debug.Log("Throwable collided with NoiseGenerating Layer");
+
+         // Check if guards are in range of the noise
          Collider[] rangeChecks = Physics.OverlapSphere(new Vector3(transform.position.x, 1.3f, transform.position.z), noiseRadius, guardLayer);
 
+         // Alert all guards in range to position of noise
          if (rangeChecks.Length > 0)
          {
             foreach (var guard in rangeChecks)
@@ -46,32 +50,33 @@ public class throwable : MonoBehaviour
 
    void OnTriggerStay(Collider other)
    {
-      if (other.CompareTag("MainCamera"))
+      if (GameManager.Instance.canInteract)
       {
-         outline.enabled = true;
-         //crosshair1.SetActive(false);
-         //crosshair2.SetActive(true);
-         interactable = true;
+         // Check collision with camera collider
+         if (other.CompareTag("MainCamera"))
+         {
+            // Enable outline and interaction
+            outline.enabled = true;
+            interactable = true;
+         }
       }
    }
 
    void OnTriggerExit(Collider other)
    {
+      // Check collision with camera collider
       if (other.CompareTag("MainCamera"))
       {
+         // Undo interaction mode when leaving element
          if (pickedup == false)
          {
             outline.enabled = false;
-            //crosshair1.SetActive(true);
-            //crosshair2.SetActive(false);
             interactable = false;
          }
          if (pickedup == true)
          {
             objTransform.parent = null;
             objRigidbody.useGravity = true;
-            //crosshair1.SetActive(true);
-            //crosshair2.SetActive(false);
             interactable = false;
             pickedup = false;
          }
@@ -82,18 +87,21 @@ public class throwable : MonoBehaviour
    {
       if (interactable == true)
       {
+         // Let player hold items
          if (Input.GetMouseButtonDown(0))
          {
             objTransform.parent = cameraTrans;
             objRigidbody.useGravity = false;
             pickedup = true;
          }
+         // Let items fall if not clicked
          if (Input.GetMouseButtonUp(0))
          {
             objTransform.parent = null;
             objRigidbody.useGravity = true;
             pickedup = false;
          }
+         // Let player throw items with right click
          if (pickedup == true)
          {
             if (Input.GetMouseButtonDown(1))

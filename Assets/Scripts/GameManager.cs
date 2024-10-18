@@ -10,9 +10,11 @@ public class GameManager : MonoBehaviour
 
    public float currentScore = 0;
    public bool isPaused;
+   public bool canInteract;
 
    public GameObject pauseScreen;
    public GameObject gameOverScreen;
+   public GameObject instructionsScreen;
    public TextMeshProUGUI scoreText;
    public TextMeshProUGUI endScoreText;
 
@@ -25,6 +27,8 @@ public class GameManager : MonoBehaviour
    // Start is called before the first frame update
    void Start()
    {
+      TogglePause();
+      instructionsScreen.SetActive(true);
    }
 
    // Update is called once per frame
@@ -35,6 +39,12 @@ public class GameManager : MonoBehaviour
          TogglePauseScreen();
       }
 
+   }
+
+   public void StartGame()
+   {
+      TogglePause();
+      instructionsScreen.SetActive(false);
    }
 
    public void TogglePauseScreen()
@@ -63,5 +73,10 @@ public class GameManager : MonoBehaviour
    {
       gameOverScreen.SetActive(true);
       TogglePause();
+   }
+
+   public void DisableInteraction()
+   {
+      canInteract = false;
    }
 }

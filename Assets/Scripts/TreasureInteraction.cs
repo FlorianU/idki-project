@@ -29,16 +29,21 @@ public class TreasureInteraction : MonoBehaviour
 
    void OnTriggerStay(Collider other)
    {
-      if (other.CompareTag("MainCamera"))
+      if (GameManager.Instance.canInteract)
       {
-         gameObject.GetComponent<Outline>().enabled = true;
-
-         if (Input.GetMouseButtonDown(0))
+         // Collide with camera collider
+         if (other.CompareTag("MainCamera"))
          {
-            vanishingParticles.Play();
-            // make loot disappear on click
-            gameObject.SetActive(false);
-            gameManager.IncreaseScore(value);
+            // Enable outline
+            gameObject.GetComponent<Outline>().enabled = true;
+
+            if (Input.GetMouseButtonDown(0))
+            {
+               // Make loot disappear on click
+               vanishingParticles.Play();
+               gameObject.SetActive(false);
+               gameManager.IncreaseScore(value);
+            }
          }
       }
    }

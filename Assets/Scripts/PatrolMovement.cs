@@ -104,6 +104,9 @@ public class PatrolMovement : MonoBehaviour
          }
          else
          {
+            // Disable picking up objects and loot
+            GameManager.Instance.DisableInteraction();
+
             // walk to noiseDistraction
             var noiseWalkingPosition = new Vector3(noisePosition.x, transform.position.y, noisePosition.z);
             if (Vector3.Distance(this.transform.position, noiseWalkingPosition) < 1)
