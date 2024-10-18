@@ -174,7 +174,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactable: 0
   pickedup: 0
-  throwAmount: 500
+  throwAmount: 700
   noiseRadius: 13
   guardLayer:
     serializedVersion: 2

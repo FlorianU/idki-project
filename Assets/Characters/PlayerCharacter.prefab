@@ -1425,8 +1425,8 @@ MonoBehaviour:
   axes: 1
   minimumVert: -85
   maximumVert: 85
-  sensHorizontal: 3
-  sensVertical: 3
+  sensHorizontal: 2
+  sensVertical: 2
   playerCameraComponent: {fileID: 0}
 --- !u!1 &3784341344001495778
 GameObject:
@@ -2620,8 +2620,8 @@ MonoBehaviour:
   axes: 2
   minimumVert: -85
   maximumVert: 85
-  sensHorizontal: 5
-  sensVertical: 5
+  sensHorizontal: 2
+  sensVertical: 2
   playerCameraComponent: {fileID: 0}
 --- !u!65 &6873026347232531
 BoxCollider:

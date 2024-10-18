@@ -59,7 +59,7 @@ public class PlayerMovement : MonoBehaviour
             isCrouching = true;
             _charCont.height = 1;
         }
-        else if (Input.GetKeyUp(KeyCode.LeftControl))
+        else if (Input.GetKeyUp(KeyCode.C))
         {
             isCrouching = false;
             _charCont.height = 1.7f;
