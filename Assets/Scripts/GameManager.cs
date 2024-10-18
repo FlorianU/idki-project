@@ -43,6 +43,7 @@ public class GameManager : MonoBehaviour
 
    public void StartGame()
    {
+      canInteract = true;
       TogglePause();
       instructionsScreen.SetActive(false);
    }

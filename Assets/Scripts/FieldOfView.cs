@@ -26,6 +26,8 @@ public class FieldOfView : MonoBehaviour
    public Transform DamageImagePivot;
    public UnityEngine.UI.Image detectionImg;
 
+   private AudioSource audioData;
+
    private void Start()
    {
       playerRef = GameObject.FindGameObjectWithTag("Player");

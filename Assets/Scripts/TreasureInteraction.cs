@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class TreasureInteraction : MonoBehaviour
 {
    public ParticleSystem vanishingParticles;
+   public AudioSource audioSource;
    public float value;
    private GameManager gameManager;
 
@@ -40,6 +41,7 @@ public class TreasureInteraction : MonoBehaviour
             if (Input.GetMouseButtonDown(0))
             {
                // Make loot disappear on click
+               audioSource.Play(0);
                vanishingParticles.Play();
                gameObject.SetActive(false);
                gameManager.IncreaseScore(value);

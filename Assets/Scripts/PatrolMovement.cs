@@ -20,6 +20,7 @@ public class PatrolMovement : MonoBehaviour
    private Animator animator;
    private FieldOfView fov;
    private GameObject player;
+   private AudioSource audioData;
    private Vector3 initialPosition;
    private Quaternion initialRotation;
 
@@ -34,6 +35,7 @@ public class PatrolMovement : MonoBehaviour
       _charCont = GetComponent<CharacterController>();
       animator = GetComponent<Animator>();
       fov = GetComponent<FieldOfView>();
+      audioData = GetComponent<AudioSource>();
 
       fov.OnDetectionAction += Fov_OnDetectionAction;
       initialPosition = transform.position;
@@ -42,8 +44,13 @@ public class PatrolMovement : MonoBehaviour
 
    private void Fov_OnDetectionAction()
    {
-      player = GameObject.FindGameObjectWithTag("Player");
-      hasDetected = true;
+      if (!hasDetected)
+      {
+         player = GameObject.FindGameObjectWithTag("Player");
+         hasDetected = true;
+
+         audioData.Play(0);
+      }
    }
 
    public void AlertNoise(Vector3 position)
@@ -104,9 +111,6 @@ public class PatrolMovement : MonoBehaviour
          }
          else
          {
-            // Disable picking up objects and loot
-            GameManager.Instance.DisableInteraction();
-
             // walk to noiseDistraction
             var noiseWalkingPosition = new Vector3(noisePosition.x, transform.position.y, noisePosition.z);
             if (Vector3.Distance(this.transform.position, noiseWalkingPosition) < 1)
@@ -122,6 +126,9 @@ public class PatrolMovement : MonoBehaviour
       }
       else
       {
+         // Disable picking up objects and loot
+         GameManager.Instance.DisableInteraction();
+
          if (Vector3.Distance(this.transform.position, player.transform.position) < 1)
          {
             GameManager.Instance.EndGame();

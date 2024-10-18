@@ -14,15 +14,19 @@ public class throwable : MonoBehaviour
    private Rigidbody objRigidbody;
    private Outline outline;
 
+   private AudioSource audioData;
+
    private bool isThrown;
 
    private void Start()
    {
       objRigidbody = GetComponent<Rigidbody>();
       outline = gameObject.GetComponent<Outline>();
-      outline.enabled = false;
-      objTransform = gameObject.transform;
+      audioData = GetComponent<AudioSource>();
       cameraTrans = GameObject.Find("PlayerCamera").transform;
+      objTransform = gameObject.transform;
+      
+      outline.enabled = false;
    }
 
    private void OnTriggerEnter(Collider other)
@@ -30,6 +34,8 @@ public class throwable : MonoBehaviour
       // Check if item falls on floor (NoiseGenerating Layer)
       if (isThrown && other.gameObject.layer == 9)
       {
+         audioData.Play(0);
+
          isThrown = false;
 
          Debug.Log("Throwable collided with NoiseGenerating Layer");
