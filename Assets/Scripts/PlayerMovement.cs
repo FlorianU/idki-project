@@ -54,7 +54,7 @@ public class PlayerMovement : MonoBehaviour
             isSprinting = false;
         }
 
-        if (Input.GetKeyDown(KeyCode.LeftControl))
+        if (Input.GetKeyDown(KeyCode.C))
         {
             isCrouching = true;
             _charCont.height = 1;
@@ -70,7 +70,7 @@ public class PlayerMovement : MonoBehaviour
         float deltaZ = verticalAxis * moveSpeed * (isSprinting ? 1.6f : 1) * (isCrouching ? 0.5f : 1);
         _moveDirection = new Vector3(deltaX, _moveDirection.y, deltaZ);
         
-        // Accept jump/crouch input if grounded
+        // Accept jump input if grounded
         if (_charCont.isGrounded)
         {
             if (Input.GetButtonDown("Jump"))
@@ -85,13 +85,12 @@ public class PlayerMovement : MonoBehaviour
             // STUB: Handle movement processes, such as footsteps SFX
             if (deltaX != 0 || deltaZ != 0)
             {
-                // Do handling here...
+               // ToDo: player animations
             }
         }
         else
         {
-            // STUB: Handle movement stop processes, such as footsteps SFX
-            // Do handling here...
+            // ToDo: player animations
         }
         ApplyMovement();
     }
@@ -105,9 +104,8 @@ public class PlayerMovement : MonoBehaviour
     private void ApplyMovement()
     {
         _moveDirection = transform.TransformDirection(_moveDirection);
-        // Apply gravity. Gravity is multiplied by deltaTime twice (once here, 
-        // and once below when the moveDirection is multiplied by deltaTime). 
-        // This is because gravity should be applied as an acceleration (ms^-2)
+        
+        // Apply gravity
         _moveDirection.y -= this.gravity * Time.deltaTime;
         // Move the controller
         _charCont.Move(_moveDirection * Time.deltaTime);

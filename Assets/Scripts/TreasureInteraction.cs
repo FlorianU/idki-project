@@ -10,6 +10,8 @@ public class TreasureInteraction : MonoBehaviour
    public float value;
    private GameManager gameManager;
 
+   private bool isStealable;
+
    // Start is called before the first frame update
    void Start()
    {
@@ -20,7 +22,14 @@ public class TreasureInteraction : MonoBehaviour
    // Update is called once per frame
    void Update()
    {
-
+      if (isStealable && Input.GetMouseButtonDown(0))
+      {
+         // Make loot disappear on click
+         audioSource.Play(0);
+         vanishingParticles.Play();
+         gameObject.SetActive(false);
+         gameManager.IncreaseScore(value);
+      }
    }
 
    private void OnTriggerEnter(Collider other)
@@ -37,15 +46,7 @@ public class TreasureInteraction : MonoBehaviour
          {
             // Enable outline
             gameObject.GetComponent<Outline>().enabled = true;
-
-            if (Input.GetMouseButtonDown(0))
-            {
-               // Make loot disappear on click
-               audioSource.Play(0);
-               vanishingParticles.Play();
-               gameObject.SetActive(false);
-               gameManager.IncreaseScore(value);
-            }
+            isStealable = true;
          }
       }
    }
@@ -55,6 +56,7 @@ public class TreasureInteraction : MonoBehaviour
       if (other.CompareTag("MainCamera"))
       {
          gameObject.GetComponent<Outline>().enabled = false;
+         isStealable = false;
       }
    }
 }
