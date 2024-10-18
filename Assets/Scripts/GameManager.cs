@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
    public GameObject gameOverScreen;
    public GameObject instructionsScreen;
    public TextMeshProUGUI scoreText;
+   public TextMeshProUGUI highScoreText;
    public TextMeshProUGUI endScoreText;
 
    private void Awake()
@@ -72,6 +73,15 @@ public class GameManager : MonoBehaviour
 
    public void EndGame()
    {
+      var highscore = PlayerPrefs.GetFloat("highscore");
+      if (currentScore > highscore)
+      {
+         highscore = currentScore;
+         PlayerPrefs.SetFloat("highscore", highscore);
+         PlayerPrefs.Save();
+      }
+
+      highScoreText.text = "Highscore: " + highscore.ToString("0.00") + " $";
       gameOverScreen.SetActive(true);
       TogglePause();
    }
